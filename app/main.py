@@ -14,7 +14,7 @@ BASE_DIR = Path(__file__).resolve().parent
 
 
 app = FastAPI()
-templates = Jinja2Templates(directory=f"{BASE_DIR}/templates")
+templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 
 @app.get("/", response_class=HTMLResponse)

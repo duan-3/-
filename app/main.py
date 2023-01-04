@@ -27,6 +27,17 @@ async def root(request: Request):
 @app.get("/search", response_class=HTMLResponse)
 async def search(request: Request, q: str):
     keyword = q
+    if not keyword:
+        return templates.TemplateResponse(
+            "./index.html",
+            {"request": request}
+        )
+    if await mongodb.engine.find_one(Book, Book.keyword == keyword):
+        books = await mongodb.engine.find(Book, Book.keyword == keyword)
+        return templates.TemplateResponse(
+            "./index.html",
+            {"request": request, "books": books}
+        )
     naver_book_scraper = NaverBookScraper()
     books = await naver_book_scraper.search(keyword, 20)
     book_models = []
